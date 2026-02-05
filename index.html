@@ -1,0 +1,15 @@
+fetch logs
+| filter matchesValue(index, "idx_chatbot_grp_preprod")
+| parse content, "JSON:json"
+| fieldsAdd
+    service  = toString(json[service]),
+    logpoint = toString(json[logpoint]),
+    headers  = json[headers]
+| filter matchesValue(json[component], "chatbot-ms")
+  AND (matchesValue(logpoint, "request-out") OR matchesValue(logpoint, "response-out"))
+
+/* Flatten headers into dynamic columns (one per key) */
+| fieldsFlatten headers, prefix:"h.", depth: 1
+
+/* Merge into one row per service+logpoint, dynamically for ALL header keys */
+| summarize takeAny(*) by:{service, logpoint}
