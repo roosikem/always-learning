@@ -13,3 +13,104 @@ fetch logs
 
 /* Merge into one row per service+logpoint, dynamically for ALL header keys */
 | summarize takeAny(*) by:{service, logpoint}
+
+
+# 📦 dxlclient – Java Client Generation Guide
+
+This document explains how to generate the **dxlclient Java JAR** using Swagger Codegen.
+
+---
+
+## 🚀 Generate Java Client
+
+Run the following command:
+
+```bash
+java -jar swagger-codegen-cli-3.0.67.jar generate \\
+  -i groupchatbotplatform_global_chatbot_platform_api-2.0.0-swagger.yaml \\
+  -l java \\
+  -o dxlclient \\
+  -c config.json
+```
+
+---
+
+## 🧾 Command Explanation (Simple)
+
+| Option | Meaning |
+|--------|----------|
+| `java -jar` | Runs the Swagger Codegen tool |
+| `swagger-codegen-cli-3.0.67.jar` | Swagger Codegen CLI tool |
+| `generate` | Generates client code |
+| `-i` | Input Swagger/OpenAPI YAML file |
+| `-l java` | Generate code in Java |
+| `-o dxlclient` | Output folder name |
+| `-c config.json` | Custom configuration file (packages, version, etc.) |
+
+---
+
+## ⚙️ Configuration File (`config.json`)
+
+```json
+{
+  "groupId": "group.buddy.dxlclient",
+  "artifactId": "group.buddy.dxlclient",
+  "artifactVersion": "2.0.0",
+  "apiPackage": "dxlApi",
+  "modelPackage": "dxlModel",
+  "invokerPackage": "dxlInvoker"
+}
+```
+
+---
+
+## 🏗 Build the JAR
+
+After generation:
+
+```bash
+cd dxlclient
+mvn clean install
+```
+
+The generated JAR will be available in:
+
+```
+dxlclient/target/
+```
+
+Example:
+
+```
+group.buddy.dxlclient-2.0.0.jar
+```
+
+---
+
+## 🔎 Compatibility Check (Simple)
+
+Before replacing the existing `dxlclient` JAR:
+
+- Keep same `groupId` and `artifactId`
+- Do not change package names (`dxlApi`, `dxlModel`, `dxlInvoker`)
+- Do not remove or rename existing API methods
+- Do not change existing model field types
+- Update version properly (e.g., `2.0.0 → 2.0.1` for minor changes)
+
+Test by replacing the JAR in one service and running:
+
+```bash
+mvn clean install
+```
+
+If build and tests pass, the new JAR is compatible.
+
+---
+
+## 📌 Summary
+
+1. Reads the Swagger YAML file  
+2. Generates Java client code  
+3. Builds a reusable JAR  
+4. Verifies compatibility before release  
+"""
