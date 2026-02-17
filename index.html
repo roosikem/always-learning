@@ -114,3 +114,27 @@ If build and tests pass, the new JAR is compatible.
 3. Builds a reusable JAR  
 4. Verifies compatibility before release  
 """
+
+
+## 🔎 Compatibility Recommendation
+
+For better compatibility, it is recommended to:
+
+- Compare the newly generated code with the existing `dxlclient` source code.
+- Identify only the actual API or model changes.
+- Manually update the required changes in the existing project instead of fully replacing it.
+- Preserve existing package structure and method signatures.
+- Avoid unnecessary regeneration changes (formatting, dependency updates, etc.).
+
+### ✅ Recommended Approach
+
+1. Generate the new client in a separate folder.
+2. Compare it with the current `dxlclient` code (using Git diff or IDE compare tool).
+3. Apply only required API/model updates to the existing project.
+4. Rebuild and test.
+5. Release with proper version increment.
+
+This approach ensures:
+- Backward compatibility  
+- Controlled changes  
+- No unexpected breaking changes in dependent services  
